@@ -3,16 +3,21 @@ import './style.css';
 
 interface IWordboxProp {
   word: string;
+  onFinish: () => void;
 }
 
-const Wordbox: React.FC<IWordboxProp> = ({ word }) => {
+const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish }) => {
   const [lettersLeft, setLettersLeft] = useState<string>(word);
   
   useEffect(() => {
     const handleKeyUp = (event: KeyboardEvent) => {
       setLettersLeft((prevLettersLeft) => {
         if (prevLettersLeft && event.key === prevLettersLeft[0]) {
-          return prevLettersLeft.slice(1);
+          const newLettersLeft = prevLettersLeft.slice(1);
+          if (newLettersLeft === "") {
+            onFinish();
+          }
+          return newLettersLeft;
         }
         return prevLettersLeft;
       });
@@ -23,7 +28,7 @@ const Wordbox: React.FC<IWordboxProp> = ({ word }) => {
     return () => {
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, [onFinish]);
 
   return (
     <div className="wordbox">{lettersLeft}</div>
