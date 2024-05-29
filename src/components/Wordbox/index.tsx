@@ -13,7 +13,16 @@ const Wordbox: React.FC<IWordboxProp> = ({ word, active, onFinish }) => {
 
   // State to indicate if the user made a mistake
   const [mistake, setMistake] = useState<boolean>(false);
-  
+
+  // State to track when onFinish should be called
+  const [shouldFinish, setShouldFinish] = useState(false);
+
+  useEffect(() => {
+    if (shouldFinish) {
+      onFinish();
+    }
+  }, [shouldFinish, onFinish]);
+
   // useEffect to add and remove keyup event listener on active word
   useEffect(() => {
     if (!active) return;
@@ -25,11 +34,7 @@ const Wordbox: React.FC<IWordboxProp> = ({ word, active, onFinish }) => {
             setMistake(false);
             const newLettersLeft = prevLettersLeft.slice(1);
             if (newLettersLeft === "") {
-              // Use setTimeout to defer the state update to the next event loop iteration
-              // to avoid Warning: Cannot update a component (`Stage`) while rendering a different component (`Wordbox`)
-              setTimeout(() => {
-                onFinish();
-              }, 0);
+              setShouldFinish(true);
             }
             return newLettersLeft;
           } else {
@@ -45,7 +50,7 @@ const Wordbox: React.FC<IWordboxProp> = ({ word, active, onFinish }) => {
     return () => {
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [onFinish]);
+  }, [active, onFinish]);
 
   return (
     // Render the div with a dynamic class based on the mistake state
