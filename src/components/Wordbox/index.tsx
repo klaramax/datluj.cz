@@ -7,9 +7,13 @@ interface IWordboxProp {
 }
 
 const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish }) => {
+  // State for remaining letters of the word
   const [lettersLeft, setLettersLeft] = useState<string>(word);
+
+  // State to indicate if the user made a mistake
   const [mistake, setMistake] = useState<boolean>(false);
   
+  // useEffect to add and remove keyup event listener
   useEffect(() => {
     const handleKeyUp = (event: KeyboardEvent) => {
       setLettersLeft((prevLettersLeft) => {
@@ -37,6 +41,7 @@ const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish }) => {
   }, [onFinish]);
 
   return (
+    // Render the div with a dynamic class based on the mistake state
     <div className={`wordbox ${mistake ? 'wordbox--mistake' : ''}`}>
       {lettersLeft}
     </div>
