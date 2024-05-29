@@ -1,31 +1,37 @@
 import { useState } from 'react';
 import Wordbox from '../Wordbox';
 import wordList from '../../word-list';
+import { v4 as uuidv4 } from 'uuid';
 import './style.css';
 
 
-const generateWord = (size: number) => {
+interface WordItem {
+  id: string;
+  word: string;
+}
+
+const generateWord = (size: number): WordItem => {
   const sizeIndex = size === undefined
     ? Math.floor(Math.random() * wordList.length)
     : size - 3;
   
   if (sizeIndex < 0 || sizeIndex >= wordList.length) {
-    return null;
+    return { id: uuidv4(), word: '' };
   }
   
   const words = wordList[sizeIndex];
   const wordIndex = Math.floor(Math.random() * words.length);
-  return words[wordIndex];
+  return { id: uuidv4(), word: words[wordIndex] };
 };
 
 const Stage = () => {
   const initialWords = [generateWord(6), generateWord(6), generateWord(6)];
-  const [words, setWords] = useState<string[]>(initialWords);
+  const [words, setWords] = useState<WordItem[]>(initialWords);
 
   const handleFinish = () => {
-    setWords((prevWords) => {console.log('11111', prevWords)
+    setWords((prevWords) => {
       // Remove the first word
-      const newWords = prevWords.slice(1);console.log('22222', newWords);console.log([...newWords, generateWord(6)])
+      const newWords = prevWords.slice(1);
       // Add a new word to the end of the array
       return [...newWords, generateWord(6)];
     });
@@ -35,10 +41,10 @@ const Stage = () => {
     <div className="stage">
       <div className="stage__mistakes">Chyb: 0</div>
       <div className="stage__words">
-        {words.map((word, index) => (
+        {words.map((wordItem, index) => (
           <Wordbox
-            key={word}
-            word={word}
+            key={wordItem.id}
+            word={wordItem.word}
             active={index === 0}
             onFinish={handleFinish}
           />
