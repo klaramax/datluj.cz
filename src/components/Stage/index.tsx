@@ -27,6 +27,11 @@ const generateWord = (size: number): WordItem => {
 const Stage = () => {
   const initialWords = [generateWord(6), generateWord(6), generateWord(6)];
   const [words, setWords] = useState<WordItem[]>(initialWords);
+  const [mistakes, setMistakes] = useState(0);
+
+  const handleMistake = () => {
+    setMistakes((prevMistakes) => prevMistakes + 1);
+  };
 
   const handleFinish = () => {
     setWords((prevWords) => {
@@ -39,7 +44,7 @@ const Stage = () => {
 
   return (
     <div className="stage">
-      <div className="stage__mistakes">Chyb: 0</div>
+      <div className="stage__mistakes">Počet chyb: {mistakes}</div>
       <div className="stage__words">
         {words.map((wordItem, index) => (
           <Wordbox
@@ -47,6 +52,7 @@ const Stage = () => {
             word={wordItem.word}
             active={index === 0}
             onFinish={handleFinish}
+            onMistake={handleMistake}
           />
         ))}
       </div>

@@ -5,9 +5,10 @@ interface IWordboxProp {
   word: string;
   active: boolean;
   onFinish: () => void;
+  onMistake: () => void;
 }
 
-const Wordbox: React.FC<IWordboxProp> = ({ word, active, onFinish }) => {
+const Wordbox: React.FC<IWordboxProp> = ({ word, active, onFinish, onMistake }) => {
   // State for remaining letters of the word
   const [lettersLeft, setLettersLeft] = useState<string>(word);
 
@@ -17,11 +18,21 @@ const Wordbox: React.FC<IWordboxProp> = ({ word, active, onFinish }) => {
   // State to track when onFinish should be called
   const [shouldFinish, setShouldFinish] = useState(false);
 
+  // State to track when onMistake should be called
+  const [shouldReportMistake, setShouldReportMistake] = useState(false);
+
   useEffect(() => {
     if (shouldFinish) {
       onFinish();
     }
   }, [shouldFinish, onFinish]);
+
+  useEffect(() => {
+    if (shouldReportMistake) {
+      onMistake();
+      setShouldReportMistake(false);
+    }
+  }, [shouldReportMistake, onMistake]);
 
   // useEffect to add and remove keyup event listener on active word
   useEffect(() => {
@@ -39,6 +50,7 @@ const Wordbox: React.FC<IWordboxProp> = ({ word, active, onFinish }) => {
             return newLettersLeft;
           } else {
             setMistake(true);
+            setShouldReportMistake(true);
           }
         }
         return prevLettersLeft;
