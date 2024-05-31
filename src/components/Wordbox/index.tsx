@@ -16,10 +16,10 @@ const Wordbox: React.FC<IWordboxProp> = ({ word, active, onFinish, onMistake }) 
   const [mistake, setMistake] = useState<boolean>(false);
 
   // State to track when onFinish should be called
-  const [shouldFinish, setShouldFinish] = useState(false);
+  const [shouldFinish, setShouldFinish] = useState<boolean>(false);
 
   // State to track when onMistake should be called
-  const [shouldReportMistake, setShouldReportMistake] = useState(false);
+  const [shouldReportMistake, setShouldReportMistake] = useState<boolean>(false);
 
   useEffect(() => {
     if (shouldFinish) {
