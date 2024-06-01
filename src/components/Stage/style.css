@@ -10,7 +10,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 200px;
-    border-radius: 8px 8px 0 0;
+    border-radius: 24px 24px 0 0;
     background-color: #efefef;
     padding: 5rem 2rem 3rem;
 }
@@ -51,13 +51,23 @@
 .restart-button__wrapper {
     display: flex;
     justify-content: center;
-    margin: 0.5rem;
+    padding: 0.5rem;
+    background-color: #efefef;
 }
 
 .restart-button {
     width: 150px;
     height: 40px;
     cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid #adb5bd;
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.restart-button:hover {
+    color: #8028bc;
+    border-color: #8028bc;
 }
 
 @media (max-width: 991px) {
