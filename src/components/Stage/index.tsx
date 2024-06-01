@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Wordbox from '../Wordbox';
 import wordList from '../../word-list';
 import './style.css';
-import keyboardImage from "../../images/keyboard.jpg";
-
+import keyboardImage from "../../images/klavesnice.png";
 
 interface WordItem {
     id: number;
@@ -18,16 +17,16 @@ const generateWord = (size: number): WordItem => {
         : size - 3;
 
     if (sizeIndex < 0 || sizeIndex >= wordList.length) {
-        return {id: idCounter, word: ''};
+        return { id: idCounter, word: '' };
     }
 
     const words = wordList[sizeIndex];
     const wordIndex = Math.floor(Math.random() * words.length);
     console.log(idCounter++, words[wordIndex]);
-    return {id: idCounter++, word: words[wordIndex]};
+    return { id: idCounter++, word: words[wordIndex] };
 };
 
-const Stage = () => {
+const Stage: React.FC = () => {
     const initialWords = [generateWord(6), generateWord(6), generateWord(6)];
     const [words, setWords] = useState<WordItem[]>(initialWords);
     const [mistakes, setMistakes] = useState(0);
@@ -79,7 +78,6 @@ const Stage = () => {
                     <div className="stage__stats--counter">{mistakes}</div>
                 </div>
 
-
                 <div className="stage-middle">
                     {/* Display of correctness */}
                     <div className="stage__correctness">
@@ -114,10 +112,8 @@ const Stage = () => {
                 </button>
             </div>
             <div className="keyboard-container">
-                <img src={keyboardImage} alt="Keyboard animated image" className="keyboard"/>
+                <img src={keyboardImage} alt="Keyboard animated image" className="keyboard" />
             </div>
-
-
         </div>
     );
 };
