@@ -24,3 +24,18 @@ body {
     padding: 1em;
     margin: 0;
 }
+
+.keyboard-container {
+    display: flex;
+    justify-content: center;
+}
+
+.keyboard {
+    margin: 0 auto;
+}
+
+@media (max-width: 991px) {
+    .keyboard {
+        max-width: 100%;
+    }
+}

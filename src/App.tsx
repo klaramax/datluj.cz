@@ -1,5 +1,6 @@
 import Stage from './components/Stage';
-import Keyboard from './components/Keyboard';
+import keyboardImage from "./typing.jpg";
+import React from "react";
 
 
 const App: React.FC = () => {
@@ -7,7 +8,9 @@ const App: React.FC = () => {
     <div className="container">
       <h1>Datlování</h1>
       <Stage />
-      <Keyboard/>
+        <div className="keyboard-container">
+            <img src={keyboardImage} alt="Keyboard animated image" className="keyboard"/>;
+        </div>
     </div>
   );
 };
