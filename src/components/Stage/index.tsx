@@ -28,9 +28,15 @@ const Stage = () => {
   const initialWords = [generateWord(6), generateWord(6), generateWord(6)];
   const [words, setWords] = useState<WordItem[]>(initialWords);
   const [mistakes, setMistakes] = useState(0);
+  const [correctKeystrokes, setCorrectKeystrokes] = useState(0);
+  const [totalKeystrokes, setTotalKeystrokes] = useState(0);
 
   const handleMistake = () => {
     setMistakes((prevMistakes) => prevMistakes + 1);
+  };
+
+  const handleCorrectKeystroke = () => {
+    setCorrectKeystrokes((prevCorrectKeystrokes) => prevCorrectKeystrokes + 1);
   };
 
   const handleFinish = () => {
@@ -42,21 +48,36 @@ const Stage = () => {
     });
   };
 
+  const handleKeystroke = () => {
+    setTotalKeystrokes((prevTotalKeystrokes) => prevTotalKeystrokes + 1);
+  };
+
+  const correctnessPercentage =
+    totalKeystrokes > 0
+      ? ((correctKeystrokes / totalKeystrokes) * 100).toFixed(1)
+      : '0.00';
+
   return (
-    <div className="stage">
-      <div className="stage__mistakes">Počet chyb: {mistakes}</div>
-      <div className="stage__words">
-        {words.map((wordItem, index) => (
-          <Wordbox
-            key={wordItem.id}
-            word={wordItem.word}
-            active={index === 0}
-            onFinish={handleFinish}
-            onMistake={handleMistake}
-          />
-        ))}
+      <div className="stage">
+        <div className="stage__correctness">
+          Procentuální bezchybnost: {correctnessPercentage}%
+        </div>
+        <div className="stage__keystrokes">Správné úhozy: {correctKeystrokes}</div>
+        <div className="stage__mistakes">Špatné úhozy: {mistakes}</div>
+        <div className="stage__words">
+          {words.map((wordItem, index) => (
+              <Wordbox
+                  key={wordItem.id}
+                  word={wordItem.word}
+                  active={index === 0}
+                  onFinish={handleFinish}
+                  onMistake={handleMistake}
+                  onCorrectKeystroke={handleCorrectKeystroke}
+                  onKeystroke={handleKeystroke}
+              />
+          ))}
+        </div>
       </div>
-    </div>
   );
 };
 
