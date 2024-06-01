@@ -1,27 +1,27 @@
 import { useState } from 'react';
 import Wordbox from '../Wordbox';
 import wordList from '../../word-list';
-import { v4 as uuidv4 } from 'uuid';
 import './style.css';
 
-
 interface WordItem {
-  id: string;
+  id: number;
   word: string;
 }
+
+let idCounter = 0;
 
 const generateWord = (size: number): WordItem => {
   const sizeIndex = size === undefined
     ? Math.floor(Math.random() * wordList.length)
     : size - 3;
-  
+
   if (sizeIndex < 0 || sizeIndex >= wordList.length) {
-    return { id: uuidv4(), word: '' };
+    return { id: idCounter, word: '' };
   }
-  
+
   const words = wordList[sizeIndex];
-  const wordIndex = Math.floor(Math.random() * words.length);
-  return { id: uuidv4(), word: words[wordIndex] };
+  const wordIndex = Math.floor(Math.random() * words.length);console.log(idCounter++, words[wordIndex]);
+  return { id: idCounter++, word: words[wordIndex] };
 };
 
 const Stage = () => {
