@@ -105,12 +105,19 @@ const Stage = () => {
                     <div className="stage__stats--emoji" role="img" aria-label="Happy face">🙂</div>
                     <div className="stage__stats--counter">{correctKeystrokes}</div>
                 </div>
-
             </div>
             {/* Closing tag for stage-main */}
+
+            <div className="restart-button__wrapper">
+                <button onClick={() => window.location.reload()} className="restart-button">
+                    Začít znovu
+                </button>
+            </div>
             <div className="keyboard-container">
                 <img src={keyboardImage} alt="Keyboard animated image" className="keyboard"/>
             </div>
+
+
         </div>
     );
 };

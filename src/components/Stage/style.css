@@ -48,6 +48,18 @@
     display: flex;
 }
 
+.restart-button__wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 0.5rem;
+}
+
+.restart-button {
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+}
+
 @media (max-width: 991px) {
     .stage {
         padding: 3rem;
