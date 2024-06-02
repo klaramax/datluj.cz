@@ -38,10 +38,18 @@
     align-items: center;
 }
 
-.stage__correctness {
-    min-width: 152px;
+.stage__accuracy {
+    min-width: 190px;
     font-weight: 600;
     font-size: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.stage__stats--kpm {
+    min-width: 180px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .stage__words {

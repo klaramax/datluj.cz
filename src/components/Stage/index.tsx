@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import Wordbox from '../Wordbox';
 import wordList from '../../word-list';
 import './style.css';
@@ -17,28 +17,58 @@ const generateWord = (size: number): WordItem => {
         : size - 3;
 
     if (sizeIndex < 0 || sizeIndex >= wordList.length) {
-        return { id: idCounter, word: '' };
+        return {id: idCounter, word: ''};
     }
 
     const words = wordList[sizeIndex];
     const wordIndex = Math.floor(Math.random() * words.length);
-    console.log(idCounter++, words[wordIndex]);
-    return { id: idCounter++, word: words[wordIndex] };
+    return {id: idCounter++, word: words[wordIndex]};
 };
 
 const Stage: React.FC = () => {
     const initialWords = [generateWord(6), generateWord(6), generateWord(6)];
     const [words, setWords] = useState<WordItem[]>(initialWords);
-    const [mistakes, setMistakes] = useState(0);
-    const [correctKeystrokes, setCorrectKeystrokes] = useState(0);
-    const [totalKeystrokes, setTotalKeystrokes] = useState(0);
+    const [mistakes, setMistakes] = useState<number>(0);
+    const [correctKeystrokes, setCorrectKeystrokes] = useState<number>(0);
+    const [totalKeystrokes, setTotalKeystrokes] = useState<number>(0);
+    const [startTime, setStartTime] = useState<number | null>(null);
+    const [kpm, setKpm] = useState<number>(0);
+    const [accuracy, setAccuracy] = useState<number>(0);
+
+    const updateKpm = (keystrokes: number) => {
+        if (startTime) {
+            const elapsedTime = Date.now() - startTime;
+            const minutes = elapsedTime / 60000;
+            setKpm(parseFloat((keystrokes / minutes).toFixed(0)));
+        }
+    };
+
+    const calculateAccuracy = (correctKeystrokes: number, totalKeystrokes: number): number => {
+        if (totalKeystrokes === 0) {
+            return 0;
+        }
+        const percentage = (correctKeystrokes / totalKeystrokes) * 100;
+        return parseFloat(percentage.toFixed(1));
+    };
 
     const handleMistake = () => {
         setMistakes((prevMistakes) => prevMistakes + 1);
+        setTotalKeystrokes((prevTotalKeystrokes) => {
+            const newTotalKeystrokes = prevTotalKeystrokes + 1;
+            updateKpm(newTotalKeystrokes);
+            setAccuracy(calculateAccuracy(correctKeystrokes, newTotalKeystrokes));
+            return newTotalKeystrokes;
+        });
     };
 
     const handleCorrectKeystroke = () => {
         setCorrectKeystrokes((prevCorrectKeystrokes) => prevCorrectKeystrokes + 1);
+        setTotalKeystrokes((prevTotalKeystrokes) => {
+            const newTotalKeystrokes = prevTotalKeystrokes + 1;
+            updateKpm(newTotalKeystrokes);
+            setAccuracy(calculateAccuracy(correctKeystrokes + 1, newTotalKeystrokes));
+            return newTotalKeystrokes;
+        });
     };
 
     const handleFinish = () => {
@@ -50,23 +80,22 @@ const Stage: React.FC = () => {
         });
     };
 
-    const handleKeystroke = () => {
-        setTotalKeystrokes((prevTotalKeystrokes) => prevTotalKeystrokes + 1);
-    };
+    useEffect(() => {
+        if (totalKeystrokes > 0 && !startTime) {
+            setStartTime(Date.now());
+        }
+    }, [totalKeystrokes, startTime]);
 
-    const correctnessPercentage = (): number => {
-        if (totalKeystrokes === 0) {
-            return 0;
+    useEffect(() => {
+        if (startTime) {
+            const interval = setInterval(() => {
+                updateKpm(totalKeystrokes);
+            }, 1000);
+
+            return () => clearInterval(interval);
         }
-        const percentage = (correctKeystrokes / totalKeystrokes) * 100;
-        if (percentage === 100) {
-            return 100;
-        }
-        if (percentage === 0) {
-            return 0;
-        }
-        return parseFloat(percentage.toFixed(1));
-    };
+    }, [startTime, totalKeystrokes]);
+
 
     return (
         <div className="stage">
@@ -79,9 +108,17 @@ const Stage: React.FC = () => {
                 </div>
 
                 <div className="stage-middle">
-                    {/* Display of correctness */}
-                    <div className="stage__correctness">
-                        Score: {correctnessPercentage()}%
+
+                    {/* Display of accuracy */}
+                    <div className="stage__accuracy">
+                        <span>Přesnost: </span><span>{accuracy}%</span>
+                    </div>
+
+                    {/* Display of KPM */}
+                    <div className="stage__stats">
+                        <div className="stage__stats--kpm">
+                            <span>Úhozů za minutu: </span><span>{kpm}</span>
+                        </div>
                     </div>
                     <div className="stage__words">
                         {words.map((wordItem, index) => (
@@ -92,7 +129,6 @@ const Stage: React.FC = () => {
                                 onFinish={handleFinish}
                                 onMistake={handleMistake}
                                 onCorrectKeystroke={handleCorrectKeystroke}
-                                onKeystroke={handleKeystroke}
                             />
                         ))}
                     </div>
@@ -112,7 +148,7 @@ const Stage: React.FC = () => {
                 </button>
             </div>
             <div className="keyboard-container">
-                <img src={keyboardImage} alt="Keyboard animated image" className="keyboard" />
+                <img src={keyboardImage} alt="Keyboard animated image" className="keyboard"/>
             </div>
         </div>
     );

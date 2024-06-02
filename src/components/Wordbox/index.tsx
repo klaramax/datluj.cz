@@ -7,7 +7,6 @@ interface IWordboxProp {
     onFinish: () => void;
     onMistake: () => void;
     onCorrectKeystroke: () => void;
-    onKeystroke: () => void;
 }
 
 const Wordbox: React.FC<IWordboxProp> = ({
@@ -16,7 +15,6 @@ const Wordbox: React.FC<IWordboxProp> = ({
                                              onFinish,
                                              onMistake,
                                              onCorrectKeystroke,
-                                             onKeystroke,
                                          }) => {
     // State for remaining letters of the word
     const [lettersLeft, setLettersLeft] = useState<string>(word);
@@ -58,7 +56,6 @@ const Wordbox: React.FC<IWordboxProp> = ({
         if (!active) return;
 
         const handleKeyUp = (event: KeyboardEvent) => {
-            onKeystroke();
             setLettersLeft((prevLettersLeft) => {
                 if (prevLettersLeft) {
                     if (event.key === prevLettersLeft[0]) {
@@ -83,7 +80,7 @@ const Wordbox: React.FC<IWordboxProp> = ({
         return () => {
             document.removeEventListener('keyup', handleKeyUp);
         };
-    }, [active, onFinish, onMistake, onCorrectKeystroke, onKeystroke]);
+    }, [active, onFinish, onMistake, onCorrectKeystroke]);
 
     return (
         // Render the div with a dynamic class based on the mistake state
