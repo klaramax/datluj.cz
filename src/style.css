@@ -16,7 +16,7 @@ body {
 
 #root {
     background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.99), rgba(255, 255, 255, 0.95)),
-    url('images/bg-typewriting.jpg');
+    url('../public/bg-typewriting.jpg');
 }
 
 .container {

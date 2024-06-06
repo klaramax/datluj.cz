@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Wordbox from '../Wordbox';
 import wordList from '../../word-list';
 import './style.css';
-import keyboardImage from "../../images/klavesnice.png";
+import keyboardImage from "../../../public/klavesnice.png";
 
 interface WordItem {
     id: number;
