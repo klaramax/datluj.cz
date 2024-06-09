@@ -3,6 +3,7 @@ import Wordbox from '../Wordbox';
 import wordList from '../../word-list';
 import './style.css';
 import keyboardImage from './klavesnice.png';
+import errorSound from './error-sound.wav';
 
 interface WordItem {
   id: number;
@@ -53,8 +54,14 @@ const Stage: React.FC = () => {
     return parseFloat(percentage.toFixed(1));
   };
 
+  const playErrorSound = () => {
+    const audio = new Audio(errorSound);
+    audio.play();
+  };
+
   const handleMistake = () => {
     setMistakes((prevMistakes) => prevMistakes + 1);
+    playErrorSound();
     setTotalKeystrokes((prevTotalKeystrokes) => {
       const newTotalKeystrokes = prevTotalKeystrokes + 1;
       updateKpm(newTotalKeystrokes);
