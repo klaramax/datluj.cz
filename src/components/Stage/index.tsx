@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Wordbox from '../Wordbox';
 import wordList from '../../word-list';
 import './style.css';
 import keyboardImage from './klavesnice.png';
 import errorSound from './error-sound.wav';
+import soundOnImage from './sound-on.png';
+import soundOffImage from './sound-off.png';
 
 interface WordItem {
   id: number;
@@ -34,6 +36,7 @@ const Stage: React.FC = () => {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [kpm, setKpm] = useState<number>(0);
   const [accuracy, setAccuracy] = useState<number>(0);
+  const [isSoundOn, setIsSoundOn] = useState<boolean>(true);
 
   const updateKpm = (keystrokes: number) => {
     if (startTime) {
@@ -54,9 +57,13 @@ const Stage: React.FC = () => {
     return parseFloat(percentage.toFixed(1));
   };
 
+  // Create and memoize an Audio object for the error sound, ensuring it is only created once when the component mounts
+  const errorAudio = useMemo(() => new Audio(errorSound), []);
+
   const playErrorSound = () => {
-    const audio = new Audio(errorSound);
-    audio.play();
+    if (isSoundOn) {
+      errorAudio.play();
+    }
   };
 
   const handleMistake = () => {
@@ -158,13 +165,21 @@ const Stage: React.FC = () => {
       </div>
       {/* Closing tag for stage-main */}
 
-      <div className="restart-button__wrapper">
-        <button
-          onClick={() => window.location.reload()}
-          className="restart-button"
-        >
-          Začít znovu
-        </button>
+      <div className="buttons-row">
+        <div className="restart-button__wrapper">
+          <button
+            onClick={() => window.location.reload()}
+            className="restart-button"
+          >
+            Začít znovu
+          </button>
+          <img
+            onClick={() => setIsSoundOn((prevState) => !prevState)}
+            src={isSoundOn ? soundOnImage : soundOffImage}
+            className="sound-on"
+            alt="Sound icon"
+          />
+        </div>
       </div>
       <div className="keyboard-container">
         <img

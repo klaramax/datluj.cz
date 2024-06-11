@@ -56,11 +56,15 @@
     display: flex;
 }
 
-.restart-button__wrapper {
+.buttons-row {
     display: flex;
     justify-content: center;
     padding: 0.5rem;
     background-color: #efefef;
+}
+
+.restart-button__wrapper {
+    position: relative;
 }
 
 .restart-button {
@@ -76,6 +80,14 @@
 .restart-button:hover {
     color: #8028bc;
     border-color: #8028bc;
+}
+
+.sound-on {
+    position: absolute;
+    right: -65px;
+    top: 2px;
+    height: 35px;
+    cursor: pointer;
 }
 
 @media (max-width: 991px) {
