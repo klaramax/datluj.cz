@@ -3,7 +3,7 @@ import Wordbox from '../Wordbox';
 import wordList from '../../word-list';
 import './style.css';
 import keyboardImage from './klavesnice.png';
-import errorSound from './error-sound.wav';
+import errorSound from './mistake-sound.wav';
 import soundOnImage from './sound-on.png';
 import soundOffImage from './sound-off.png';
 
